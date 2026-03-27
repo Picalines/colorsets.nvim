@@ -1,0 +1,52 @@
+[tools]
+neovim = "0.11.6"
+stylua = "latest"
+"cargo:vimcats" = { version = "latest", features = "cli" }
+"aqua:LuaLS/lua-language-server" = "latest"
+watchexec = "latest"
+
+[tasks.lint]
+run = [
+  { task = "lint:format" },
+  { task = "lint:lsp" },
+]
+
+[tasks."lint:format"]
+sources = ["**/*.lua"]
+run = "stylua --check lua/"
+
+[tasks."lint:lsp"]
+sources = ["**/*.lua"]
+run = '''
+VIMRUNTIME=$(nvim --headless --clean -u NONE --noplugin "+lua io.write(vim.env.VIMRUNTIME)" +qa) \
+  lua-language-server --check . --checklevel=Warning --configpath luarc.json
+'''
+
+[tasks.format]
+sources = ["**/*.lua"]
+run = "stylua lua/"
+
+[tasks.doc]
+sources = ["lua/**/*.lua"]
+run = '''
+mkdir -p doc
+vimcats -f -i 2 --layout mini:2 lua/colorsets.lua > doc/colorsets.txt
+'''
+
+[tasks.test]
+depends = ["dev-deps"]
+sources = ["**/*.lua"]
+run = "nvim --headless --noplugin -u ./tests/run.lua"
+
+[tasks.dev-deps]
+run = '''
+mkdir -p deps
+if [ ! -d deps/mini.test/.git ]; then
+  git clone \
+    --filter=blob:none \
+    --branch stable \
+    --depth 1 \
+    https://github.com/nvim-mini/mini.test \
+    deps/mini.test
+fi
+'''
