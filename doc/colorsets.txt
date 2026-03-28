@@ -1,9 +1,28 @@
 colorsets.nvim
 
-M.setup({partial_config})                                              *M.setup*
+M.setup({partial_config?})                                             *M.setup*
 
   Parameters: ~
-    {partial_config} (ColorsetsConfigPartial)
+    {partial_config?} (ColorsetsConfigPartial)
+
+
+M.next({set_name})                                                      *M.next*
+
+  Parameters: ~
+    {set_name} (string)
+
+
+M.prev({set_name})                                                      *M.prev*
+
+  Parameters: ~
+    {set_name} (string)
+
+
+M.set({set_name}, {mode})                                                *M.set*
+
+  Parameters: ~
+    {set_name} (string)
+    {mode} (ColorsetsMode)
 
 
 vim:tw=78:ts=8:noet:ft=help:norl:
