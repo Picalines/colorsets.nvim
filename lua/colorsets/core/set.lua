@@ -1,5 +1,5 @@
-local Bimap = require 'colorsets.bimap'
-local Group = require 'colorsets.group'
+local Bimap = require 'colorsets.core.bimap'
+local Group = require 'colorsets.core.group'
 
 local inspect = vim.inspect
 

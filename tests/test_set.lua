@@ -3,7 +3,7 @@ local eq = MiniTest.expect.equality
 local err = MiniTest.expect.error
 local neq = MiniTest.expect.no_equality
 
-local Set = require 'colorsets.set'
+local Set = require 'colorsets.core.set'
 
 local T = new_set()
 

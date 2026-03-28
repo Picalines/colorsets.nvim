@@ -2,8 +2,8 @@ local new_set = MiniTest.new_set
 local eq = MiniTest.expect.equality
 local err = MiniTest.expect.error
 
-local Group = require 'colorsets.group'
-local Set = require 'colorsets.set'
+local Group = require 'colorsets.core.group'
+local Set = require 'colorsets.core.set'
 
 local T = new_set()
 

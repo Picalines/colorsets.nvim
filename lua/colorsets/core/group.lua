@@ -1,4 +1,4 @@
-local Bimap = require 'colorsets.bimap'
+local Bimap = require 'colorsets.core.bimap'
 
 local inspect = vim.inspect
 

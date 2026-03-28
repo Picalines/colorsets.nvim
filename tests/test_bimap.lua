@@ -3,7 +3,7 @@ local eq = MiniTest.expect.equality
 local err = MiniTest.expect.error
 local no_err = MiniTest.expect.no_error
 
-local Bimap = require 'colorsets.bimap'
+local Bimap = require 'colorsets.core.bimap'
 
 local T = new_set()
 
