@@ -2,6 +2,11 @@
 ---colorsets.nvim
 ---@brief ]]
 
+---@package
+---@class ColorsetsError
+---@field code string
+---@field error unknown
+
 local M = {}
 
 local Switcher = require 'colorsets.core.switcher'

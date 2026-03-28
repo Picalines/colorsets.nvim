@@ -7,10 +7,6 @@ local inspect = vim.inspect
 local Switcher = {}
 Switcher.__index = Switcher
 
----@class ColorsetsSwitcherError
----@field code string
----@field error unknown
-
 ---@class ColorsetsSwitcherConfig
 ---@field sets table<string, ColorsetsSet>
 ---@field current_colorscheme fun(): string
@@ -28,7 +24,7 @@ end
 
 ---@param set_name string
 ---@return ColorsetsSet|nil
----@return ColorsetsSwitcherError|nil
+---@return ColorsetsError|nil
 ---@private
 function Switcher:_set_by_name(set_name)
   local set = self._sets[set_name]
@@ -45,7 +41,7 @@ end
 
 ---@private
 ---@return ColorsetsColorscheme|nil
----@return ColorsetsSwitcherError|nil
+---@return ColorsetsError|nil
 function Switcher:_current_colorscheme()
   local ok, colorscheme = pcall(self._get_current_colorscheme)
   if not ok then
@@ -71,7 +67,7 @@ end
 ---@return ColorsetsSet|nil
 ---@return ColorsetsGroup|nil
 ---@return ColorsetsColorscheme|nil
----@return ColorsetsSwitcherError|nil
+---@return ColorsetsError|nil
 ---@private
 function Switcher:_current_state(set_name)
   local set, set_err = self:_set_by_name(set_name)
@@ -104,7 +100,7 @@ function Switcher:_current_state(set_name)
 end
 
 ---@param set_name string
----@return ColorsetsSwitcherError|nil err
+---@return ColorsetsError|nil err
 function Switcher:next(set_name)
   local _, group, current, err = self:_current_state(set_name)
   if group == nil or current == nil then
@@ -127,7 +123,7 @@ function Switcher:next(set_name)
 end
 
 ---@param set_name string
----@return ColorsetsSwitcherError|nil err
+---@return ColorsetsError|nil err
 function Switcher:prev(set_name)
   local _, group, current, err = self:_current_state(set_name)
   if group == nil or current == nil then
@@ -151,7 +147,7 @@ end
 
 ---@param set_name string
 ---@param mode ColorsetsMode
----@return ColorsetsSwitcherError|nil err
+---@return ColorsetsError|nil err
 function Switcher:set(set_name, mode)
   local set, group, current, err = self:_current_state(set_name)
   if set == nil or group == nil or current == nil then

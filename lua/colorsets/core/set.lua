@@ -3,10 +3,6 @@ local Group = require 'colorsets.core.group'
 
 local inspect = vim.inspect
 
----@class ColorsetsError
----@field code string
----@field error string
-
 ---@class ColorsetsSet
 ---@field modes ColorsetsReadonlyBimap<integer, ColorsetsMode>
 ---@field private _group_by_colorscheme table<ColorsetsColorscheme, ColorsetsGroup>

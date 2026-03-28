@@ -4,7 +4,7 @@ local eq = MiniTest.expect.equality
 local Set = require 'colorsets.core.set'
 local Switcher = require 'colorsets.core.switcher'
 
----@param err ColorsetsSwitcherError|nil
+---@param err ColorsetsError|nil
 ---@param code string
 ---@param error_value unknown
 local function expect_error(err, code, error_value)
