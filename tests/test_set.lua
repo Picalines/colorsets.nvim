@@ -1,9 +1,19 @@
 local new_set = MiniTest.new_set
 local eq = MiniTest.expect.equality
-local err = MiniTest.expect.error
 local neq = MiniTest.expect.no_equality
 
 local Set = require 'colorsets.core.set'
+
+---@param fn fun()
+---@param code string
+---@param message string
+local function expect_error(fn, code, message)
+  local ok, err = pcall(fn)
+
+  eq(ok, false)
+  eq(err.code, code)
+  eq(err.message, message)
+end
 
 local T = new_set()
 
@@ -50,7 +60,7 @@ T['set']['new']['stores multiple groups'] = function()
 end
 
 T['set']['new']['errors on duplicate colorscheme in set'] = function()
-  err(function()
+  expect_error(function()
     Set.new({ 'light', 'dark' }, {
       {
         light = 'dayfox',
@@ -61,7 +71,7 @@ T['set']['new']['errors on duplicate colorscheme in set'] = function()
         dark = 'carbonfox',
       },
     })
-  end, 'colorscheme "dayfox" is already mapped')
+  end, 'set_duplicate_colorscheme', 'colorscheme "dayfox" is already mapped')
 end
 
 T['set']['group_of'] = new_set()

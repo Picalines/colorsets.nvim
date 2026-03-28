@@ -3,6 +3,10 @@ local Group = require 'colorsets.core.group'
 
 local inspect = vim.inspect
 
+---@class ColorsetsError
+---@field code string
+---@field message string
+
 ---@class ColorsetsSet
 ---@field modes ColorsetsReadonlyBimap<integer, ColorsetsMode>
 ---@field private _group_by_colorscheme table<ColorsetsColorscheme, ColorsetsGroup>
@@ -39,9 +43,13 @@ function Set:_add_group(colorschemes)
   for _, colorscheme in pairs(colorschemes) do
     local existing_group = self:group_of(colorscheme)
     if existing_group ~= nil then
-      error(
-        string.format('colorscheme %s is already mapped', inspect(colorscheme))
-      )
+      error {
+        code = 'set_duplicate_colorscheme',
+        message = string.format(
+          'colorscheme %s is already mapped',
+          inspect(colorscheme)
+        ),
+      }
     end
 
     self._group_by_colorscheme[colorscheme] = group

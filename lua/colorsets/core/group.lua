@@ -21,14 +21,20 @@ Group.__index = Group
 function Group.new(set, colorschemes)
   for mode in pairs(colorschemes) do
     if set.modes:key(mode) == nil then
-      error(string.format('group has unknown mode %s', inspect(mode)))
+      error {
+        code = 'group_unknown_mode',
+        message = string.format('group has unknown mode %s', inspect(mode)),
+      }
     end
   end
 
   for index = 1, set.modes.size do
     local mode = set.modes:value(index)
     if colorschemes[mode] == nil then
-      error(string.format('group is missing mode %s', inspect(mode)))
+      error {
+        code = 'group_missing_mode',
+        message = string.format('group is missing mode %s', inspect(mode)),
+      }
     end
   end
 

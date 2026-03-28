@@ -1,9 +1,19 @@
 local new_set = MiniTest.new_set
 local eq = MiniTest.expect.equality
-local err = MiniTest.expect.error
 
 local Group = require 'colorsets.core.group'
 local Set = require 'colorsets.core.set'
+
+---@param fn fun()
+---@param code string
+---@param message string
+local function expect_error(fn, code, message)
+  local ok, err = pcall(fn)
+
+  eq(ok, false)
+  eq(err.code, code)
+  eq(err.message, message)
+end
 
 local T = new_set()
 
@@ -25,22 +35,22 @@ end
 T['group']['errors on unknown mode in config'] = function()
   local set = Set.new({ 'light', 'dark' }, {})
 
-  err(function()
+  expect_error(function()
     Group.new(set, {
       light = 'dayfox',
       high = 'carbonfox',
     })
-  end, 'group has unknown mode "high"')
+  end, 'group_unknown_mode', 'group has unknown mode "high"')
 end
 
 T['group']['errors on missing mode in config'] = function()
   local set = Set.new({ 'light', 'dark' }, {})
 
-  err(function()
+  expect_error(function()
     Group.new(set, {
       light = 'dayfox',
     })
-  end, 'group is missing mode "dark"')
+  end, 'group_missing_mode', 'group is missing mode "dark"')
 end
 
 T['group']['next_of'] = new_set()
