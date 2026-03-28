@@ -4,7 +4,7 @@
 
 local M = {}
 
-local Switcher = require 'colorsets.switcher'
+local Switcher = require 'colorsets.core.switcher'
 local config = require 'colorsets.config'
 
 ---@type ColorsetsSwitcher|nil

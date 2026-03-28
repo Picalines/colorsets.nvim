@@ -1,6 +1,6 @@
 local inspect = vim.inspect
 
----@class ColorsetsSwithcer
+---@class ColorsetsSwitcher
 ---@field private _sets table<string, ColorsetsSet>
 ---@field private _get_current_colorscheme fun(): string
 ---@field private _load_colorscheme fun(colorscheme: string)
@@ -11,13 +11,13 @@ Switcher.__index = Switcher
 ---@field code string
 ---@field error unknown
 
----@class ColorsetsSwithcerConfig
+---@class ColorsetsSwitcherConfig
 ---@field sets table<string, ColorsetsSet>
 ---@field current_colorscheme fun(): string
 ---@field load_colorscheme fun(colorscheme: string)
 
----@param config ColorsetsSwithcerConfig
----@return ColorsetsSwithcer
+---@param config ColorsetsSwitcherConfig
+---@return ColorsetsSwitcher
 function Switcher.new(config)
   return setmetatable({
     _sets = config.sets,

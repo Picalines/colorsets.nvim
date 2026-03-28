@@ -2,7 +2,7 @@ local new_set = MiniTest.new_set
 local eq = MiniTest.expect.equality
 
 local Set = require 'colorsets.core.set'
-local Switcher = require 'colorsets.switcher'
+local Switcher = require 'colorsets.core.switcher'
 
 ---@param err ColorsetsSwitcherError|nil
 ---@param code string
