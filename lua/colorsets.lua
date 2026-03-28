@@ -11,6 +11,7 @@ local M = {}
 
 local Switcher = require 'colorsets.core.switcher'
 local config = require 'colorsets.config'
+local user_command = require 'colorsets.user_command'
 
 ---@type ColorsetsSwitcher|nil
 local switcher
@@ -29,6 +30,8 @@ function M.setup(partial_config)
     current_colorscheme = full_config.current_colorscheme,
     load_colorscheme = full_config.load_colorscheme,
   }
+
+  user_command.create(switcher, full_config.command)
 end
 
 ---@param set_name string
