@@ -19,10 +19,14 @@ local M = {}
 ---@class ColorsetsConfig
 ---@field sets table<string, ColorsetsConfigSet>
 ---@field command ColorsetsConfigCommand|false
+---@field current_colorscheme fun(): string
+---@field load_colorscheme fun(colorscheme: string)
 
 ---@class ColorsetsConfigPartial
 ---@field sets? table<string, ColorsetsConfigSet>
 ---@field command? ColorsetsConfigCommand|false
+---@field current_colorscheme? fun(): string
+---@field load_colorscheme? fun(colorscheme: string)
 
 ---@type ColorsetsConfig
 local default_config = {
@@ -30,6 +34,16 @@ local default_config = {
   command = {
     name = 'Colorset',
   },
+  current_colorscheme = function()
+    local colorscheme = vim.g.colors_name
+    if type(colorscheme) ~= 'string' then
+      error 'current colorscheme (g:colors_name) is not a string'
+    end
+    return colorscheme
+  end,
+  load_colorscheme = function(colorscheme)
+    vim.cmd.colorscheme(colorscheme)
+  end,
 }
 
 ---@param partial_config ColorsetsConfigPartial

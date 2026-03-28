@@ -7,10 +7,10 @@ local M = {}
 local Switcher = require 'colorsets.switcher'
 local config = require 'colorsets.config'
 
----@type ColorsetsSwithcer|nil
+---@type ColorsetsSwitcher|nil
 local switcher
 
----@return ColorsetsSwithcer
+---@return ColorsetsSwitcher
 local function get_switcher()
   return switcher or error 'colorsets is not setup'
 end
@@ -19,7 +19,11 @@ end
 function M.setup(partial_config)
   local full_config = config.with_defaults(partial_config or {})
   local sets = config.create_sets(full_config.sets)
-  switcher = Switcher.new { sets = sets }
+  switcher = Switcher.new {
+    sets = sets,
+    current_colorscheme = full_config.current_colorscheme,
+    load_colorscheme = full_config.load_colorscheme,
+  }
 end
 
 ---@param set_name string

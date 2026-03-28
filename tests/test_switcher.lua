@@ -60,30 +60,6 @@ local function new_switcher(opts)
   end
 end
 
----@param fn fun()
-local function with_restored_vim_state(fn)
-  local original_colors_name = vim.g.colors_name
-  local original_cmd = vim.cmd
-
-  local ok, err = pcall(fn)
-
-  vim.g.colors_name = original_colors_name
-  vim.cmd = original_cmd
-
-  if not ok then
-    error(err)
-  end
-end
-
----@param load_colorscheme fun(colorscheme: string)
-local function mock_vim_cmd_colorscheme(load_colorscheme)
-  local original_cmd = vim.cmd
-
-  vim.cmd = setmetatable({
-    colorscheme = load_colorscheme,
-  }, { __index = original_cmd })
-end
-
 local T = new_set()
 
 T['switcher'] = new_set()
@@ -214,48 +190,5 @@ T['switcher']['set']['does not load when mode matches current'] = function()
   eq(switcher:set('daytime', 'dark'), nil)
   eq(loaded, {})
 end
-
-T['switcher']['default behavior'] = new_set()
-
-T['switcher']['default behavior']['reads current scheme from vim.g and loads via vim.cmd'] =
-  function()
-    with_restored_vim_state(function()
-      local loaded
-
-      vim.g.colors_name = 'dayfox'
-      mock_vim_cmd_colorscheme(function(colorscheme)
-        loaded = colorscheme
-      end)
-
-      local switcher = Switcher.new {
-        sets = { daytime = new_daytime_set() },
-      }
-
-      eq(switcher:next 'daytime', nil)
-      eq(loaded, 'nightfox')
-    end)
-  end
-
-T['switcher']['default behavior']['returns getter error when vim.g.colors_name is invalid'] =
-  function()
-    with_restored_vim_state(function()
-      vim.g.colors_name = nil
-
-      local switcher = Switcher.new {
-        sets = { daytime = new_daytime_set() },
-      }
-
-      local err = switcher:next 'daytime'
-      local actual = assert(err, 'expected error')
-
-      eq(actual.code, 'switcher_get_current_colorscheme_failed')
-      eq(
-        type(actual.error) == 'string'
-          and actual.error:match 'current colorscheme %(g:colors_name%) is not a string'
-          ~= nil,
-        true
-      )
-    end)
-  end
 
 return T

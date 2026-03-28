@@ -1,19 +1,5 @@
 local inspect = vim.inspect
 
----@return string
-local function default_current_colorscheme()
-  local colorscheme = vim.g.colors_name
-  if type(colorscheme) ~= 'string' then
-    error 'current colorscheme (g:colors_name) is not a string'
-  end
-  return colorscheme
-end
-
----@param colorscheme string
-local function default_load_colorscheme(colorscheme)
-  vim.cmd.colorscheme(colorscheme)
-end
-
 ---@class ColorsetsSwithcer
 ---@field private _sets table<string, ColorsetsSet>
 ---@field private _get_current_colorscheme fun(): string
@@ -27,17 +13,16 @@ Switcher.__index = Switcher
 
 ---@class ColorsetsSwithcerConfig
 ---@field sets table<string, ColorsetsSet>
----@field current_colorscheme? fun(): string
----@field load_colorscheme? fun(colorscheme: string)
+---@field current_colorscheme fun(): string
+---@field load_colorscheme fun(colorscheme: string)
 
 ---@param config ColorsetsSwithcerConfig
 ---@return ColorsetsSwithcer
 function Switcher.new(config)
   return setmetatable({
     _sets = config.sets,
-    _get_current_colorscheme = config.current_colorscheme
-      or default_current_colorscheme,
-    _load_colorscheme = config.load_colorscheme or default_load_colorscheme,
+    _get_current_colorscheme = config.current_colorscheme,
+    _load_colorscheme = config.load_colorscheme,
   }, Switcher)
 end
 

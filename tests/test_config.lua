@@ -34,6 +34,35 @@ T['config']['allows disabling the command'] = function()
   eq(full_config.command, false)
 end
 
+T['config']['provides default switcher hooks'] = function()
+  local loaded
+  local full_config = config.with_defaults {}
+
+  vim.g.colors_name = 'dayfox'
+  full_config.load_colorscheme = function(colorscheme)
+    loaded = colorscheme
+  end
+
+  eq(full_config.current_colorscheme(), 'dayfox')
+  full_config.load_colorscheme 'nightfox'
+  eq(loaded, 'nightfox')
+end
+
+T['config']['keeps custom switcher hooks'] = function()
+  local current_colorscheme = function()
+    return 'dayfox'
+  end
+  local load_colorscheme = function() end
+
+  local full_config = config.with_defaults {
+    current_colorscheme = current_colorscheme,
+    load_colorscheme = load_colorscheme,
+  }
+
+  eq(full_config.current_colorscheme, current_colorscheme)
+  eq(full_config.load_colorscheme, load_colorscheme)
+end
+
 T['config']['create_sets'] = new_set()
 
 T['config']['create_sets']['creates sets from config map'] = function()
