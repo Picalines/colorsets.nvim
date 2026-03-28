@@ -12,18 +12,18 @@ run = [
 ]
 
 [tasks."lint:format"]
-sources = ["**/*.lua"]
+sources = ["stylua.toml", "**/*.lua"]
 run = "stylua --check lua/"
 
 [tasks."lint:lsp"]
-sources = ["**/*.lua"]
+sources = ["luarc.json", "**/*.lua"]
 run = '''
 VIMRUNTIME=$(nvim --headless --clean -u NONE --noplugin "+lua io.write(vim.env.VIMRUNTIME)" +qa) \
   lua-language-server --check . --checklevel=Warning --configpath luarc.json
 '''
 
 [tasks.format]
-sources = ["**/*.lua"]
+sources = ["stylua.toml", "**/*.lua"]
 run = "stylua lua/"
 
 [tasks.doc]
