@@ -2,6 +2,7 @@ local inspect = vim.inspect
 
 ---@class ColorsetsSwitcher
 ---@field private _sets table<string, ColorsetsSet>
+---@field private _set_names string[]
 ---@field private _get_current_colorscheme fun(): string
 ---@field private _load_colorscheme fun(colorscheme: string)
 local Switcher = {}
@@ -15,11 +16,30 @@ Switcher.__index = Switcher
 ---@param config ColorsetsSwitcherConfig
 ---@return ColorsetsSwitcher
 function Switcher.new(config)
+  local set_names = vim.tbl_keys(config.sets)
+  table.sort(set_names)
+
   return setmetatable({
     _sets = config.sets,
+    _set_names = set_names,
     _get_current_colorscheme = config.current_colorscheme,
     _load_colorscheme = config.load_colorscheme,
   }, Switcher)
+end
+
+---@return string[]
+function Switcher:set_names()
+  return self._set_names
+end
+
+---@param set_name string
+---@return ColorsetsMode[]|nil
+function Switcher:modes_of(set_name)
+  local set = self._sets[set_name]
+  if set == nil then
+    return nil
+  end
+  return set.modes:values()
 end
 
 ---@param set_name string

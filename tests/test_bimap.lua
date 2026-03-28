@@ -68,6 +68,7 @@ T['bimap']['array builds index lookups'] = function()
   local bimap = Bimap.array { 'tokyonight', 'gruvbox', 'catppuccin' }
 
   eq(bimap.size, 3)
+  eq(bimap:values(), { 'tokyonight', 'gruvbox', 'catppuccin' })
   eq(bimap:value(1), 'tokyonight')
   eq(bimap:value(2), 'gruvbox')
   eq(bimap:value(3), 'catppuccin')

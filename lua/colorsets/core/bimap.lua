@@ -2,6 +2,7 @@
 ---@field size integer
 ---@field value fun(self: ColorsetsReadonlyBimap<K, V>, key: K): V|nil
 ---@field key fun(self: ColorsetsReadonlyBimap<K, V>, value: V): K|nil
+---@field values fun(self: ColorsetsReadonlyBimap<integer, V>): V[]
 
 ---@class ColorsetsBimap<K, V>: ColorsetsReadonlyBimap<K, V>
 ---@field private _key_to_value table<K, V>
@@ -90,6 +91,15 @@ end
 ---@return K|nil
 function Bimap:key(value)
   return self._value_to_key[value]
+end
+
+---@return V[]
+function Bimap:values()
+  local values = {}
+  for key, value in pairs(self._key_to_value) do
+    values[key] = value
+  end
+  return values
 end
 
 return Bimap
