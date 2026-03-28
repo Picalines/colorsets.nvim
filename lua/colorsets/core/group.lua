@@ -23,7 +23,7 @@ function Group.new(set, colorschemes)
     if set.modes:key(mode) == nil then
       error {
         code = 'group_unknown_mode',
-        message = string.format('group has unknown mode %s', inspect(mode)),
+        error = string.format('group has unknown mode %s', inspect(mode)),
       }
     end
   end
@@ -33,7 +33,7 @@ function Group.new(set, colorschemes)
     if colorschemes[mode] == nil then
       error {
         code = 'group_missing_mode',
-        message = string.format('group is missing mode %s', inspect(mode)),
+        error = string.format('group is missing mode %s', inspect(mode)),
       }
     end
   end

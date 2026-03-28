@@ -5,7 +5,7 @@ local inspect = vim.inspect
 
 ---@class ColorsetsError
 ---@field code string
----@field message string
+---@field error string
 
 ---@class ColorsetsSet
 ---@field modes ColorsetsReadonlyBimap<integer, ColorsetsMode>
@@ -45,7 +45,7 @@ function Set:_add_group(colorschemes)
     if existing_group ~= nil then
       error {
         code = 'set_duplicate_colorscheme',
-        message = string.format(
+        error = string.format(
           'colorscheme %s is already mapped',
           inspect(colorscheme)
         ),

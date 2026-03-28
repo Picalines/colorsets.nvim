@@ -42,16 +42,16 @@ end
 local function normalize_error(err)
   if type(err) == 'table' then
     local code = err.code
-    local message = err.message
+    local error = err.error
 
-    if type(code) == 'string' and type(message) == 'string' then
+    if type(code) == 'string' and type(error) == 'string' then
       return err
     end
   end
 
   return {
     code = 'config_set_creation_failed',
-    message = tostring(err),
+    error = tostring(err),
   }
 end
 
@@ -68,11 +68,7 @@ function M.create_sets(set_configs)
 
       error {
         code = err.code,
-        message = string.format(
-          'colorset %s: %s',
-          inspect(set_name),
-          err.message
-        ),
+        error = string.format('colorset %s: %s', inspect(set_name), err.error),
       }
     end
 

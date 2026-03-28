@@ -6,13 +6,13 @@ local Set = require 'colorsets.core.set'
 
 ---@param fn fun()
 ---@param code string
----@param message string
-local function expect_error(fn, code, message)
+---@param error_message string
+local function expect_error(fn, code, error_message)
   local ok, err = pcall(fn)
 
   eq(ok, false)
   eq(err.code, code)
-  eq(err.message, message)
+  eq(err.error, error_message)
 end
 
 local T = new_set()
