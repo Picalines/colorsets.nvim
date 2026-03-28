@@ -1,0 +1,80 @@
+local new_set = MiniTest.new_set
+local eq = MiniTest.expect.equality
+local err = MiniTest.expect.error
+local neq = MiniTest.expect.no_equality
+
+local Set = require 'colorsets.set'
+
+local T = new_set()
+
+T['set'] = new_set()
+
+T['set']['new'] = new_set()
+
+T['set']['new']['stores group lookups by colorscheme'] = function()
+  local set = Set.new({ 'light', 'dark' }, {
+    {
+      light = 'dayfox',
+      dark = 'nightfox',
+    },
+  })
+
+  local group = assert(set:group_of 'dayfox', 'expected group for dayfox')
+
+  eq(group, set:group_of 'nightfox')
+  eq(group:colorscheme 'light', 'dayfox')
+  eq(group:colorscheme 'dark', 'nightfox')
+end
+
+T['set']['new']['stores multiple groups'] = function()
+  local set = Set.new({ 'light', 'dark' }, {
+    {
+      light = 'dayfox',
+      dark = 'nightfox',
+    },
+    {
+      light = 'perpetua-light',
+      dark = 'perpetua-dark',
+    },
+  })
+
+  local first_group = assert(set:group_of 'dayfox', 'expected group for dayfox')
+  local second_group = assert(
+    set:group_of 'perpetua-light',
+    'expected group for perpetua-light'
+  )
+
+  eq(set:group_of 'nightfox', first_group)
+  eq(set:group_of 'perpetua-dark', second_group)
+  neq(first_group, second_group)
+end
+
+T['set']['new']['errors on duplicate colorscheme in set'] = function()
+  err(function()
+    Set.new({ 'light', 'dark' }, {
+      {
+        light = 'dayfox',
+        dark = 'nightfox',
+      },
+      {
+        light = 'dayfox',
+        dark = 'carbonfox',
+      },
+    })
+  end, 'colorscheme "dayfox" is already mapped')
+end
+
+T['set']['group_of'] = new_set()
+
+T['set']['group_of']['returns nil for colorscheme outside the set'] = function()
+  local set = Set.new({ 'light', 'dark' }, {
+    {
+      light = 'dayfox',
+      dark = 'nightfox',
+    },
+  })
+
+  eq(set:group_of 'gruvbox', nil)
+end
+
+return T
