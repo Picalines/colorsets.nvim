@@ -12,7 +12,6 @@ Stateless colorscheme switcher for Neovim
 <summary>With <code>vim.pack</code></summary>
 
 ```lua
--- Experimental built-in, https://neovim.io/doc/user/pack/#vim.pack.add()
 vim.pack.add({ 'https://github.com/Picalines/colorsets.nvim' })
 ```
 </details>
