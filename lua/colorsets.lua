@@ -1,6 +1,15 @@
+---@diagnostic disable: invisible
+---@toc colorsets.contents
+---@mod colorsets colorsets.nvim
 ---@brief [[
----colorsets.nvim
+---Stateless colorscheme switcher for Neovim.
+---
+---Define named sets of related colorschemes and switch within a set without
+---losing the current group. Use it from Lua or through the built-in
+---`:Colorset` command.
 ---@brief ]]
+
+---@tag colorsets.nvim
 
 ---@package
 ---@class ColorsetsError
@@ -21,7 +30,26 @@ local function get_switcher()
   return switcher or error 'colorsets is not setup'
 end
 
----@param partial_config? ColorsetsConfigPartial
+---@mod colorsets.setup Setup
+
+---Configure `colorsets.nvim`.
+---
+---Call this once during startup to define your colorsets, optionally rename or
+---disable the user command, and override how the current colorscheme is read
+---or applied.
+---@param partial_config? ColorsetsConfigPartial Partial plugin config.
+---@usage lua [[
+---require('colorsets').setup {
+---  sets = {
+---    daytime = {
+---      modes = { 'light', 'dark' },
+---      colorschemes = {
+---        { light = 'dayfox', dark = 'nightfox' },
+---      },
+---    },
+---  },
+---}
+---@usage ]]
 function M.setup(partial_config)
   local full_config = config.with_defaults(partial_config or {})
   local sets = config.create_sets(full_config.sets)
@@ -34,18 +62,26 @@ function M.setup(partial_config)
   user_command.create(switcher, full_config.command)
 end
 
----@param set_name string
+---@mod colorsets.api Lua API
+
+---Switch a set to the next mode in the current group.
+---@param set_name string Colorset name.
+---@usage `require('colorsets').next 'daytime'`
 function M.next(set_name)
   return get_switcher():next(set_name)
 end
 
----@param set_name string
+---Switch a set to the previous mode in the current group.
+---@param set_name string Colorset name.
+---@usage `require('colorsets').prev 'daytime'`
 function M.prev(set_name)
   return get_switcher():prev(set_name)
 end
 
----@param set_name string
----@param mode ColorsetsMode
+---Switch a set to a specific mode.
+---@param set_name string Colorset name.
+---@param mode ColorsetsMode Target mode name.
+---@usage `require('colorsets').set('daytime', 'dark')`
 function M.set(set_name, mode)
   return get_switcher():set(set_name, mode)
 end

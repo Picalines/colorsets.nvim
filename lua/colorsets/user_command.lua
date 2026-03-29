@@ -1,3 +1,18 @@
+---@mod colorsets.user-command User Command
+---@tag :Colorset
+---@brief [[
+---`:Colorset` switches colorschemes inside a configured set.
+---
+---Usage:
+---  - `:Colorset {set} next`
+---  - `:Colorset {set} prev`
+---  - `:Colorset {set} set {mode}`
+---
+---`{set}` is a set name from `setup().sets`. `next` and `prev` keep the current
+---group and move between its modes. `set` jumps to a specific mode. The command
+---includes completion for set names, actions, and mode names.
+---@brief ]]
+
 local inspect = vim.inspect
 
 local M = {}
@@ -48,6 +63,7 @@ local function complete_matches(items, arg_lead)
   return matches
 end
 
+---@private
 ---@class ColorsetsUserSubcommand
 ---@field args integer
 ---@field complete? fun(switcher: ColorsetsSwitcher, set_name: string, arg_lead: string, args: string[]): string[]
@@ -172,6 +188,7 @@ local function run(switcher, fargs)
   actual_subcommand.run(switcher, set_name, args)
 end
 
+---@private
 ---@param switcher ColorsetsSwitcher
 ---@param command_config ColorsetsConfigCommand|false
 function M.create(switcher, command_config)

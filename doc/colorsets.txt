@@ -1,28 +1,186 @@
-colorsets.nvim
+==============================================================================
+Table of Contents                                           *colorsets.contents*
 
-M.setup({partial_config?})                                             *M.setup*
+colorsets.nvim ····················································· |colorsets|
+Setup ························································ |colorsets.setup|
+Lua API ························································ |colorsets.api|
+Config ······················································ |colorsets.config|
+Hooks ························································ |colorsets.hooks|
+User Command ·········································· |colorsets.user-command|
+
+==============================================================================
+colorsets.nvim                                                       *colorsets*
+
+Stateless colorscheme switcher for Neovim.
+
+Define named sets of related colorschemes and switch within a set without
+losing the current group. Use it from Lua or through the built-in
+`:Colorset` command.
+
+                                                                *colorsets.nvim*
+==============================================================================
+Setup                                                          *colorsets.setup*
+
+M.setup({partial_config?})                                 *colorsets.api.setup*
+  Configure `colorsets.nvim`.
+
+  Call this once during startup to define your colorsets, optionally rename or
+  disable the user command, and override how the current colorscheme is read
+  or applied.
 
   Parameters: ~
-    {partial_config?} (ColorsetsConfigPartial)
+    {partial_config?} (ColorsetsConfigPartial) Partial plugin config.
+
+  Usage: ~
+>lua
+    require('colorsets').setup {
+      sets = {
+        daytime = {
+          modes = { 'light', 'dark' },
+          colorschemes = {
+            { light = 'dayfox', dark = 'nightfox' },
+          },
+        },
+      },
+    }
+<
 
 
-M.next({set_name})                                                      *M.next*
+==============================================================================
+Lua API                                                          *colorsets.api*
+
+M.next({set_name})                                          *colorsets.api.next*
+  Switch a set to the next mode in the current group.
 
   Parameters: ~
-    {set_name} (string)
+    {set_name} (string) Colorset name.
+
+  Usage: ~
+>lua
+    require('colorsets').next 'daytime'
+<
 
 
-M.prev({set_name})                                                      *M.prev*
+M.prev({set_name})                                          *colorsets.api.prev*
+  Switch a set to the previous mode in the current group.
 
   Parameters: ~
-    {set_name} (string)
+    {set_name} (string) Colorset name.
+
+  Usage: ~
+>lua
+    require('colorsets').prev 'daytime'
+<
 
 
-M.set({set_name}, {mode})                                                *M.set*
+M.set({set_name}, {mode})                                    *colorsets.api.set*
+  Switch a set to a specific mode.
 
   Parameters: ~
-    {set_name} (string)
-    {mode} (ColorsetsMode)
+    {set_name} (string) Colorset name.
+    {mode} (ColorsetsMode) Target mode name.
 
+  Usage: ~
+>lua
+    require('colorsets').set('daytime', 'dark')
+<
+
+
+==============================================================================
+Config                                                        *colorsets.config*
+
+ColorsetsColorscheme                                      *ColorsetsColorscheme*
+  Colorscheme name used inside a colorset group.
+
+  Type: ~
+    string
+
+
+ColorsetsMode                                                    *ColorsetsMode*
+  Mode name used to address one variant inside a set.
+
+  Type: ~
+    string
+
+
+ColorsetsConfigGroup                                      *ColorsetsConfigGroup*
+  Mapping from mode name to colorscheme name for one group.
+
+  Type: ~
+    table<ColorsetsMode,ColorsetsColorscheme>
+
+
+ColorsetsConfigSet                                          *ColorsetsConfigSet*
+  One named colorset definition passed to `setup().sets`.
+
+  Fields: ~
+    {modes} (ColorsetsMode[])
+    {colorschemes} (ColorsetsConfigGroup[])
+
+
+ColorsetsConfigCommand                                  *ColorsetsConfigCommand*
+  Configuration for the generated user command.
+
+  Fields: ~
+    {name} (string)
+
+
+ColorsetsConfig                                                *ColorsetsConfig*
+  Full plugin configuration after defaults are applied.
+
+  Fields: ~
+    {sets} (table<string,ColorsetsConfigSet>)
+    {command} (ColorsetsConfigCommand|false)
+    {current_colorscheme} (fun():string)
+    {load_colorscheme} (fun(colorscheme:string))
+
+
+ColorsetsConfigPartial                                  *ColorsetsConfigPartial*
+  Configuration accepted by `require('colorsets').setup()`.
+
+  Fields: ~
+    {sets?} (table<string,ColorsetsConfigSet>)
+    {command?} (ColorsetsConfigCommand|false)
+    {current_colorscheme?} (fun():string)
+    {load_colorscheme?} (fun(colorscheme:string))
+
+
+==============================================================================
+Hooks                                                          *colorsets.hooks*
+
+Examples for config hooks passed to `setup()`.
+
+`current_colorscheme` returns the active colorscheme name:
+>lua
+  require('colorsets').setup {
+    current_colorscheme = function()
+      return vim.g.colors_name
+    end,
+  }
+<
+
+`load_colorscheme` applies a colorscheme by name:
+>lua
+  require('colorsets').setup {
+    load_colorscheme = function(colorscheme)
+      vim.cmd.colorscheme(colorscheme)
+    end,
+  }
+<
+
+==============================================================================
+User Command                                            *colorsets.user-command*
+
+                                                                     *:Colorset*
+`:Colorset` switches colorschemes inside a configured set.
+
+Usage:
+  - `:Colorset {set} next`
+  - `:Colorset {set} prev`
+  - `:Colorset {set} set {mode}`
+
+`{set}` is a set name from `setup().sets`. `next` and `prev` keep the current
+group and move between its modes. `set` jumps to a specific mode. The command
+includes completion for set names, actions, and mode names.
 
 vim:tw=78:ts=8:noet:ft=help:norl:

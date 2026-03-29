@@ -30,7 +30,11 @@ run = "stylua lua/"
 sources = ["lua/**/*.lua"]
 run = '''
 mkdir -p doc
-vimcats -f -i 2 --layout mini:2 lua/colorsets.lua > doc/colorsets.txt
+vimcats \
+  -f -i 2 --layout mini:2 \
+  lua/*.lua \
+  lua/**/*.lua \
+  > doc/colorsets.txt
 '''
 
 [tasks.test]
