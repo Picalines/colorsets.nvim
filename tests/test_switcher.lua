@@ -33,7 +33,7 @@ end
 ---@field sets? table<string, ColorsetsSet>
 ---@field current? string
 ---@field current_colorscheme? fun(): unknown
----@field load_colorscheme? fun(colorscheme: string)
+---@field load_colorscheme? fun(colorscheme: string, colorset: ColorsetsLoadColorset)
 
 ---@param opts? ColorsetsSwitcherTestOptions
 ---@return ColorsetsSwitcher
@@ -71,6 +71,19 @@ T['switcher']['next']['loads next colorscheme from current group'] = function()
 
   eq(switcher:next 'daytime', nil)
   eq(loaded, { 'nightfox' })
+end
+
+T['switcher']['next']['passes colorset metadata to loader'] = function()
+  local received_colorset
+  local switcher = new_switcher {
+    current = 'dayfox',
+    load_colorscheme = function(_, colorset)
+      received_colorset = colorset
+    end,
+  }
+
+  eq(switcher:next 'daytime', nil)
+  eq(received_colorset, { name = 'daytime', mode = 'dark' })
 end
 
 T['switcher']['next']['wraps within the current group'] = function()
@@ -172,6 +185,19 @@ T['switcher']['set']['loads requested mode from current group'] = function()
 
   eq(switcher:set('daytime', 'dark'), nil)
   eq(loaded, { 'perpetua-dark' })
+end
+
+T['switcher']['set']['passes colorset metadata to loader'] = function()
+  local received_colorset
+  local switcher = new_switcher {
+    current = 'perpetua-light',
+    load_colorscheme = function(_, colorset)
+      received_colorset = colorset
+    end,
+  }
+
+  eq(switcher:set('daytime', 'dark'), nil)
+  eq(received_colorset, { name = 'daytime', mode = 'dark' })
 end
 
 T['switcher']['set']['returns error for unknown mode'] = function()

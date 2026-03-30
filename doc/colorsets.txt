@@ -147,6 +147,14 @@ ColorsetsConfigCommand                                  *ColorsetsConfigCommand*
     {name} (string)
 
 
+ColorsetsLoadColorset                                    *ColorsetsLoadColorset*
+  Metadata about the target colorset passed to `load_colorscheme`.
+
+  Fields: ~
+    {name} (string)
+    {mode} (ColorsetsMode)
+
+
 ColorsetsConfig                                                *ColorsetsConfig*
   Full plugin configuration after defaults are applied.
 
@@ -154,7 +162,7 @@ ColorsetsConfig                                                *ColorsetsConfig*
     {sets} (table<string,ColorsetsConfigSet>)
     {command} (ColorsetsConfigCommand|false)
     {current_colorscheme} (fun():string)
-    {load_colorscheme} (fun(colorscheme:string))
+    {load_colorscheme} (fun(colorscheme:string,colorset:ColorsetsLoadColorset))
 
 
 ColorsetsConfigPartial                                  *ColorsetsConfigPartial*
@@ -164,7 +172,7 @@ ColorsetsConfigPartial                                  *ColorsetsConfigPartial*
     {sets?} (table<string,ColorsetsConfigSet>)
     {command?} (ColorsetsConfigCommand|false)
     {current_colorscheme?} (fun():string)
-    {load_colorscheme?} (fun(colorscheme:string))
+    {load_colorscheme?} (fun(colorscheme:string,colorset:ColorsetsLoadColorset))
 
 
 ==============================================================================
@@ -184,7 +192,8 @@ Examples for config hooks passed to `setup()`.
 `load_colorscheme` applies a colorscheme by name:
 >lua
   require('colorsets').setup {
-    load_colorscheme = function(colorscheme)
+    load_colorscheme = function(colorscheme, colorset)
+      -- `colorset` contains `{ name = '...', mode = '...' }`
       vim.cmd.colorscheme(colorscheme)
     end,
   }

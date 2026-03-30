@@ -18,19 +18,24 @@
 ---@class ColorsetsConfigCommand
 ---@field name string
 
+---Metadata about the target colorset passed to `load_colorscheme`.
+---@class ColorsetsLoadColorset
+---@field name string
+---@field mode ColorsetsMode
+
 ---Full plugin configuration after defaults are applied.
 ---@class ColorsetsConfig
 ---@field sets table<string, ColorsetsConfigSet>
 ---@field command ColorsetsConfigCommand|false
 ---@field current_colorscheme fun(): string
----@field load_colorscheme fun(colorscheme: string)
+---@field load_colorscheme fun(colorscheme: string, colorset: ColorsetsLoadColorset)
 
 ---Configuration accepted by `require('colorsets').setup()`.
 ---@class ColorsetsConfigPartial
 ---@field sets? table<string, ColorsetsConfigSet>
 ---@field command? ColorsetsConfigCommand|false
 ---@field current_colorscheme? fun(): string
----@field load_colorscheme? fun(colorscheme: string)
+---@field load_colorscheme? fun(colorscheme: string, colorset: ColorsetsLoadColorset)
 
 ---@mod colorsets.hooks Hooks
 ---@brief [[
@@ -48,7 +53,8 @@
 ---`load_colorscheme` applies a colorscheme by name:
 --->lua
 ---  require('colorsets').setup {
----    load_colorscheme = function(colorscheme)
+---    load_colorscheme = function(colorscheme, colorset)
+---      -- `colorset` contains `{ name = '...', mode = '...' }`
 ---      vim.cmd.colorscheme(colorscheme)
 ---    end,
 ---  }

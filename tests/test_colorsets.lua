@@ -133,19 +133,22 @@ end
 T['colorsets']['setup']['passes custom switcher hooks from config'] = function()
   with_restored_test_state(function()
     local loaded
+    local loaded_colorset
     local colorsets = require 'colorsets'
 
     colorsets.setup(vim.tbl_deep_extend('force', daytime_config(), {
       current_colorscheme = function()
         return 'perpetua-light'
       end,
-      load_colorscheme = function(colorscheme)
+      load_colorscheme = function(colorscheme, colorset)
         loaded = colorscheme
+        loaded_colorset = colorset
       end,
     }))
 
     eq(colorsets.next 'daytime', nil)
     eq(loaded, 'perpetua-dark')
+    eq(loaded_colorset, { name = 'daytime', mode = 'dark' })
   end)
 end
 

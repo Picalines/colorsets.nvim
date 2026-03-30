@@ -4,14 +4,14 @@ local inspect = vim.inspect
 ---@field private _sets table<string, ColorsetsSet>
 ---@field private _set_names string[]
 ---@field private _get_current_colorscheme fun(): string
----@field private _load_colorscheme fun(colorscheme: string)
+---@field private _load_colorscheme fun(colorscheme: string, colorset: ColorsetsLoadColorset)
 local Switcher = {}
 Switcher.__index = Switcher
 
 ---@class ColorsetsSwitcherConfig
 ---@field sets table<string, ColorsetsSet>
 ---@field current_colorscheme fun(): string
----@field load_colorscheme fun(colorscheme: string)
+---@field load_colorscheme fun(colorscheme: string, colorset: ColorsetsLoadColorset)
 
 ---@param config ColorsetsSwitcherConfig
 ---@return ColorsetsSwitcher
@@ -119,6 +119,21 @@ function Switcher:_current_state(set_name)
   return set, group, colorscheme, nil
 end
 
+---@param colorscheme ColorsetsColorscheme
+---@param colorset ColorsetsLoadColorset
+---@return ColorsetsError|nil
+---@private
+function Switcher:_load_target_colorscheme(colorscheme, colorset)
+  local ok, load_err = pcall(self._load_colorscheme, colorscheme, colorset)
+
+  if not ok then
+    return {
+      code = 'switcher_load_colorscheme_failed',
+      error = load_err,
+    }
+  end
+end
+
 ---@param set_name string
 ---@return ColorsetsError|nil err
 function Switcher:next(set_name)
@@ -129,17 +144,14 @@ function Switcher:next(set_name)
 
   local target = assert(group:next_of(current), 'expected next colorscheme')
 
-  if target.colorscheme ~= current then
-    local ok, load_err = pcall(self._load_colorscheme, target.colorscheme)
-    if not ok then
-      return {
-        code = 'switcher_load_colorscheme_failed',
-        error = load_err,
-      }
-    end
+  if target.colorscheme == current then
+    return nil
   end
 
-  return nil
+  return self:_load_target_colorscheme(
+    target.colorscheme,
+    { name = set_name, mode = target.mode }
+  )
 end
 
 ---@param set_name string
@@ -152,17 +164,14 @@ function Switcher:prev(set_name)
 
   local target = assert(group:prev_of(current), 'expected previous colorscheme')
 
-  if target.colorscheme ~= current then
-    local ok, load_err = pcall(self._load_colorscheme, target.colorscheme)
-    if not ok then
-      return {
-        code = 'switcher_load_colorscheme_failed',
-        error = load_err,
-      }
-    end
+  if target.colorscheme == current then
+    return nil
   end
 
-  return nil
+  return self:_load_target_colorscheme(
+    target.colorscheme,
+    { name = set_name, mode = target.mode }
+  )
 end
 
 ---@param set_name string
@@ -188,17 +197,14 @@ function Switcher:set(set_name, mode)
   local target_colorscheme =
     assert(group:colorscheme(mode), 'expected colorscheme for mode')
 
-  if target_colorscheme ~= current then
-    local ok, load_err = pcall(self._load_colorscheme, target_colorscheme)
-    if not ok then
-      return {
-        code = 'switcher_load_colorscheme_failed',
-        error = load_err,
-      }
-    end
+  if target_colorscheme == current then
+    return nil
   end
 
-  return nil
+  return self:_load_target_colorscheme(
+    target_colorscheme,
+    { name = set_name, mode = mode }
+  )
 end
 
 return Switcher

@@ -44,7 +44,7 @@ T['config']['provides default switcher hooks'] = function()
   end
 
   eq(full_config.current_colorscheme(), 'dayfox')
-  full_config.load_colorscheme 'nightfox'
+  full_config.load_colorscheme('nightfox', { name = 'daytime', mode = 'dark' })
   eq(loaded, 'nightfox')
 end
 
