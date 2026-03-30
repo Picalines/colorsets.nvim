@@ -94,6 +94,21 @@ require('colorsets').setup {
 }
 ```
 
+## Using with dynamic colorschemes
+
+Some Neovim colorschemes are dynamic and build their palette from external state like `'background'`, global variables, or other setup code. In those cases, it is often simpler to create a small wrapper colorscheme which fixes that state first and then exposes its own stable `g:colors_name`.
+
+For example, `mini.hues` bundled colorschemes read `'background'` while loading. This wrapper creates a fixed dark variant named `miniwinter-dark`:
+
+```vim
+" ~/.config/nvim/colors/miniwinter-dark.vim
+set background=dark
+runtime colors/miniwinter.lua
+let g:colors_name = 'miniwinter-dark'
+```
+
+This file makes `miniwinter-dark` a valid option for the `:colorscheme` command, so you can include it in a colorset just like any other colorscheme.
+
 ## Using with auto-dark-mode.nvim
 
 `colorsets.nvim` pairs well with [auto-dark-mode.nvim](https://github.com/f-person/auto-dark-mode.nvim) if you want to switch a set from OS light/dark changes without relying on `'background'`
@@ -120,4 +135,4 @@ require('auto-dark-mode').setup {
 
 ## Why?
 
-Different Neovim colorscheme handle `'background'` differently, and I had cases where simple option toggle wasn't enough. With this plugin it's possible to make all sorts of colorscheme grouping like light/dark and hight/low contrast
+Neovim does not have a simple light/dark toggle option, because colorschemes build their palettes in different ways. This plugin lets you link different colorschemes into logical groups and switch between them in different scenarios.

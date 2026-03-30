@@ -62,6 +62,27 @@ function M.setup(partial_config)
   user_command.create(switcher, full_config.command)
 end
 
+---@mod colorsets.dynamic Dynamic colorschemes
+---@brief [[
+---Some Neovim colorschemes are dynamic and build their palette from external
+---state like `'background'`, global variables, or other setup code. In those
+---cases it is often simpler to create a small wrapper colorscheme which fixes
+---that state first and then exposes its own stable `g:colors_name`.
+---
+---For example, `mini.hues` bundled colorschemes read `'background'` while
+---loading. This wrapper creates a fixed dark variant named `miniwinter-dark`:
+--->vim
+---  " ~/.config/nvim/colors/miniwinter-dark.vim
+---  set background=dark
+---  runtime colors/miniwinter.lua
+---  let g:colors_name = 'miniwinter-dark'
+---<
+---
+---This file makes `miniwinter-dark` a valid option for the `:colorscheme`
+---command, so you can include it in a colorset just like any other
+---colorscheme.
+---@brief ]]
+
 ---@mod colorsets.api Lua API
 
 ---Switch a set to the next mode in the current group.
