@@ -72,10 +72,10 @@ function Group:prev_of(colorscheme)
   return self:_move_from(colorscheme, -1)
 end
 
+---@private
 ---@param colorscheme ColorsetsColorscheme
 ---@param offset integer
 ---@return ColorsetsGroupEntry|nil
----@private
 function Group:_move_from(colorscheme, offset)
   local current_mode = self:mode(colorscheme)
   if current_mode == nil then

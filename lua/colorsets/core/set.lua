@@ -31,8 +31,8 @@ function Set:group_of(colorscheme)
   return self._group_by_colorscheme[colorscheme]
 end
 
----@param colorschemes table<ColorsetsMode, ColorsetsColorscheme>
 ---@private
+---@param colorschemes table<ColorsetsMode, ColorsetsColorscheme>
 function Set:_add_group(colorschemes)
   local group = Group.new(self, colorschemes)
 

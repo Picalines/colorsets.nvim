@@ -42,10 +42,10 @@ function Switcher:modes_of(set_name)
   return set.modes:values()
 end
 
+---@private
 ---@param set_name string
 ---@return ColorsetsSet|nil
 ---@return ColorsetsError|nil
----@private
 function Switcher:_set_by_name(set_name)
   local set = self._sets[set_name]
   if set == nil then
@@ -83,12 +83,12 @@ function Switcher:_current_colorscheme()
   return colorscheme, nil
 end
 
+---@private
 ---@param set_name string
 ---@return ColorsetsSet|nil
 ---@return ColorsetsGroup|nil
 ---@return ColorsetsColorscheme|nil
 ---@return ColorsetsError|nil
----@private
 function Switcher:_current_state(set_name)
   local set, set_err = self:_set_by_name(set_name)
   if set == nil then
@@ -119,10 +119,10 @@ function Switcher:_current_state(set_name)
   return set, group, colorscheme, nil
 end
 
+---@private
 ---@param colorscheme ColorsetsColorscheme
 ---@param colorset ColorsetsLoadColorset
 ---@return ColorsetsError|nil
----@private
 function Switcher:_load_target_colorscheme(colorscheme, colorset)
   local ok, load_err = pcall(self._load_colorscheme, colorscheme, colorset)
 
