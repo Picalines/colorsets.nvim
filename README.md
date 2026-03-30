@@ -20,7 +20,12 @@ vim.pack.add({ 'https://github.com/Picalines/colorsets.nvim' })
 <summary>With <code>lazy.nvim</code></summary>
 
 ```lua
-{ 'Picalines/colorsets.nvim' }
+{
+  'Picalines/colorsets.nvim',
+  ---@module 'colorsets'
+  ---@type ColorsetsConfigPartial
+  opts = {}
+}
 ```
 </details>
 
