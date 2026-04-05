@@ -6,6 +6,8 @@ Stateless colorscheme switcher for Neovim
 - Keep multiple groups in one set, preserve the current group while switching modes
 - Switch from Lua or through the built-in `:Colorset` command with completion
 
+Requires Neovim `0.12+`
+
 ## Install
 
 <details>
