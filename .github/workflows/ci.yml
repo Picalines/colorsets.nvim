@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Neovim
         uses: rhysd/action-setup-vim@v1
@@ -41,12 +41,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
 
       - name: Setup Neovim
         uses: rhysd/action-setup-vim@v1
         with:
           neovim: true
+        uses: actions/checkout@v6
 
       - name: Setup mise
         uses: jdx/mise-action@v2
