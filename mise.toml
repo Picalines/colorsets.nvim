@@ -6,10 +6,8 @@ stylua = "latest"
 watchexec = "latest"
 
 [tasks.lint]
-run = [
-  { task = "lint:format" },
-  { task = "lint:lsp" },
-]
+alias = "l"
+depends = "lint:*"
 
 [tasks."lint:format"]
 sources = ["stylua.toml", "**/*.lua"]
@@ -23,6 +21,7 @@ VIMRUNTIME=$(nvim --headless --clean -u NONE --noplugin "+lua io.write(vim.env.V
 '''
 
 [tasks.format]
+alias = "f"
 sources = ["stylua.toml", "**/*.lua"]
 run = "stylua lua/"
 
@@ -38,6 +37,7 @@ vimcats \
 '''
 
 [tasks.test]
+alias = "t"
 depends = ["dev-deps"]
 sources = ["**/*.lua"]
 run = "nvim --headless --noplugin -u ./tests/run.lua"
